@@ -12,6 +12,7 @@
 
 #ifndef BSQ_H
 # define BSQ_H
+# define BUFFER_SIZE 1024
 # include <unistd.h>//write
 # include <stdlib.h>//malloc; free
 # include <fcntl.h>//open; close; read
@@ -24,9 +25,10 @@ typedef struct s_par
     int max_i;
     int max_j;
     char    p;
+    char    ;
+    char    ;
     char    *map;
-    int
-};
-
+    int **tab;
+}   t_par;
 
 #endif
