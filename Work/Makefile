@@ -1,4 +1,25 @@
-SRCS = src/*.c
-OBJ = ${SRC:.c=.o}
-CC = gcc
-FLAGS = -Wall -Wextra -Wer
+NAME	= bsq
+SRCS	= srcs/*.c
+OBJS	= ${SRC:.c=.o}
+LIBC	= ar rc
+CC		= gcc
+RM		= rm -f
+CFLAGS = -Wall -Wextra -Werror
+
+.c.o:
+	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+
+${NAME}: ${OBJS}
+	${LIBC} ${NAME} ${OBJS}
+
+all: ${NAME}
+
+clean:
+	${RM} ${OBJS}
+
+fclean: clean
+	${RM} ${NAME}
+
+re: fclean all
+
+.PHONY: all clean fclean re 

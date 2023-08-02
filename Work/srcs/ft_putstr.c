@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>//write
+#include "bsq.h"
 
 void	ft_putchar(char c)
 {
@@ -28,4 +28,12 @@ void	ft_putstr(char *str)
 		i++;
 	}
 }
-
+void	ft_putstr_err(char *str)
+{
+	write(2, str, ft_strlen(str));
+}
+int		ft_display_error(void)
+{
+	ft_putstr_err("map error\n");
+	return (0);
+}

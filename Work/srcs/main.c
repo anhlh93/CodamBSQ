@@ -1,47 +1,73 @@
 #include "bsq.h"
 
+char    *ft_read_map(char *file)
+{
+    int bytesRead;
+    char	buf[BUF_SIZE + 1];
+	char	*str;
+	int	fd;
+    
+    fd = open(file, O_RDONLY);
+	if (fd == -1) 
+        return (NULL);
+    if (!(str = (char *)malloc(sizeof(char))))
+		return (NULL);
+	str[0] = '\0';
+    bytesRead = read(fd, buf, BUF_SIZE);
+    while (bytesRead >= 1)
+    {
+        buf[bytesRead] = '\0';
+		str = ft_strjoin(str, buf);
+        bytesRead = read(fd, buf, BUF_SIZE);
+    }
+    bytesRead = close(fd);
+    if (bytesRead == -1)
+        return (NULL);
+    return (str);
+}
+
 int start_bsq(char *filename)
 {
     char    *map;
-    struct t_par   *par;
+    t_par   *par;
 
     if (!(map = ft_read_map(filename)))
-        return (ft_error_message());
-    if (!(par = (t_par *)malloc(sizeof(t_par))) || !is_valid(par, map))
-        return (ft_error_message());
+        return (ft_display_error());
+    if (!(par = (t_par *)(malloc(sizeof(t_par)))) || !col_limit(par, map))
+        return (ft_display_error());
     else
     {
         par->max = 0;
         par->max_i = 0;
         par->max_j = 0;
-        if (!parse_map(par))
+        if (!init_grid(par))
             return (0);
-        display_bsq(par);
+        print_bsq(par);
     }
     return (1);
 }
 
 int    ft_display_input(void)
 {
-    char    buf[BUFFER_SIZE + 1];
+    char    buf[BUF_SIZE + 1];
     char    *map;
     int r;
-    struct t_par   *par;
+    t_par   *par;
 
     if (!(map = (char *)malloc(sizeof(char))))
         return (0);
-    map[0] = '/0';
-    while ((r = read(0, buf, BUFFER_SIZE)))
+    map[0] = '\0';
+    while ((r = read(0, buf, BUF_SIZE)))
     {
         buf[r] = '\0';
         map = ft_strjoin(map, buf);
     }
-    if (!(par = (t_par *)malloc(sizeof(t_par))) || !is_valid(par, map))
-        return (ft_error_message());
+    if (!(par = (t_par *)(malloc(sizeof(t_par)))) || !col_limit(par, map))
+        return (ft_display_error());
     par->max = 0;
     par->max_i = 0;
     par->max_j = 0;
-    if (!parse_map(par))
+    if (!init_grid(par))
         return (0);
     print_bsq(par);
     return (1);
